@@ -1,33 +1,29 @@
 package ru.netology;
+
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
 
 public class TasksTest {
     @Test
-    public void shouldRunQueryOfDifferentTasks() {
-       simpleTask simpleTask = new simpleTask(5, "Позвонить родителям");
+    public void simpleTasksMatchesCorrectly() {
+        Task task = new SimpleTask(5, "Позвонить родителям");
+        Assertions.assertTrue(task.matches("Позвонить"));
+        Assertions.assertFalse(task.matches("Прийти"));
+    }
 
+    @Test
+    public void epicMatchesCorrectly() {
         String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
-        Epic epic = new Epic(55, subtasks);
+        Task task = new Epic(555, subtasks);
+        Assertions.assertTrue(task.matches("Хлеб"));
+        Assertions.assertFalse(task.matches("Сгущенка"));
+    }
 
-        Meeting meeting = new Meeting(
-                555,
-                "Выкатка 3й версии приложения",
-                "Приложение НетоБанка",
-                "Во вторник после обеда"
-        );
-
-        Task task = new Task(55);
-        String query = "Позвонить";
-
-        task.matches(String.valueOf(simpleTask));
-        task.matches(String.valueOf(epic));
-        task.matches(String.valueOf(meeting));
-
-        Task[] expected = {simpleTask, epic, meeting};
-        Task[] actual;
-        actual = task.matches(String query);
-        Assertions.assertArrayEquals(expected, actual);
+    @Test
+    public void meetingMatchesCorrectly() {
+        Task task = new Meeting(207, "Идентификация", "Шпионы", "23/03/2023");
+        Assertions.assertTrue(task.matches("Шпионы"));
+        Assertions.assertFalse(task.matches("Балерины"));
     }
 }
